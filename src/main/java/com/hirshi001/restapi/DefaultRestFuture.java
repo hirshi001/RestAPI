@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
 
-    private static final ScheduledExecutorService DEFAULT_EXECUTOR = Executors.newScheduledThreadPool(ForkJoinPool.getCommonPoolParallelism());
+    public static final ScheduledExecutorService DEFAULT_EXECUTOR = Executors.newScheduledThreadPool(ForkJoinPool.getCommonPoolParallelism());
 
     private ScheduledExecutorService executor;
     private boolean isCancelled;
