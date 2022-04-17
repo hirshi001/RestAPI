@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test.RestTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-04-17T00:03:32" hostname="Hrishikeshs-MacBook-Pro.local" time="0.031">
+  <properties/>
+  <testcase name="deadlockTest()" classname="test.RestTest" time="0.031"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
