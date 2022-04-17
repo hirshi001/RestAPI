@@ -181,13 +181,12 @@ public class RestTest {
     @Test
     public void deadlockTest(){
         RestFuture<String, String> future = RestFuture.create();
-       future.then(future);
+        future.then(future);
 
+        future.getExecutor().submit(()->{
+            future.accept("Test");
+        });
 
-       future.getExecutor().submit(()->{
-           future.accept("Test");
-       });
-
-       assertThrows(TimeoutException.class, ()->future.get(10, TimeUnit.MILLISECONDS));
+        assertThrows(TimeoutException.class, ()->future.get(10, TimeUnit.MILLISECONDS));
     }
 }
