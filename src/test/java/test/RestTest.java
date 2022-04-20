@@ -2,13 +2,11 @@ package test;
 
 import com.hirshi001.restapi.DefaultRestFuture;
 import com.hirshi001.restapi.RestFuture;
+import com.hirshi001.restapi.RestFutureConsumer;
 import com.hirshi001.restapi.RestFutureListener;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -23,8 +21,11 @@ public class RestTest {
         AtomicBoolean flag3 = new AtomicBoolean(false);
 
         AtomicLong start = new AtomicLong();
-        RestFuture<String, String> future = new DefaultRestFuture<>(Executors.newScheduledThreadPool(1));
+        RestFuture<?, String> future = RestFuture.create((f, i)->{
+            System.out.println("Start");
+            f.taskFinished("Hi");
 
+        });
 
         future
                 .then((s)->{
@@ -43,9 +44,8 @@ public class RestTest {
                     if(diff > 980 && diff < 1020){
                         flag3.set(true);
                     }
-                });
+                }).perform();
 
-        future.accept("test");
 
         Thread.sleep(1200);
 
@@ -68,7 +68,7 @@ public class RestTest {
                         RestFuture.<String>create().then(s -> flag3.set(true)))
                 .then(s -> flag4.set(true));
 
-        future.accept("Test");
+        future.perform("Test");
         Thread.sleep(100);
 
         assertTrue(flag1.get());
@@ -89,6 +89,7 @@ public class RestTest {
         Thread mainThread = Thread.currentThread();
 
         RestFuture<String, String> future = RestFuture.create();
+
         future
                 .then(s -> flag1.set(true))
                 .thenAsync(s -> {
@@ -108,7 +109,7 @@ public class RestTest {
                         }))
                 .then(s -> flag6.set(true));
 
-        future.accept("Test");
+        future.perform("Test");
         Thread.sleep(100);
 
         assertTrue(flag1.get());
@@ -126,10 +127,14 @@ public class RestTest {
 
         AtomicBoolean flag1 = new AtomicBoolean(false);
 
-        RestFuture<String, String> future = RestFuture.create();
-        future.then(s -> flag1.set(true));
+        RestFuture<?, String> future = RestFuture.create((f, i)->
+                f.getExecutor().schedule( ()-> f.taskFinished(message),
+                        100,
+                        TimeUnit.MILLISECONDS));
 
-        future.getExecutor().schedule(() -> future.accept(message), 100, TimeUnit.MILLISECONDS);
+        future = future.then(s -> flag1.set(true));
+        future.perform();
+
 
         assertEquals(message, future.get());
         assertTrue(flag1.get());
@@ -141,10 +146,10 @@ public class RestTest {
 
         AtomicBoolean flag1 = new AtomicBoolean(false);
 
-        RestFuture<String, String> future = RestFuture.create();
-        future.then(s -> flag1.set(true));
-
-        future.getExecutor().schedule(() -> future.accept(message), 100, TimeUnit.MILLISECONDS);
+        RestFuture<String, String> future = RestFuture.<String>create((f, i)->{
+            f.getExecutor().schedule( ()-> f.taskFinished(message), 100, TimeUnit.MILLISECONDS);
+        }).then(s -> flag1.set(true));
+        future.performAsync();
 
         assertEquals(message, future.get(200, TimeUnit.MILLISECONDS));
         assertTrue(flag1.get());
@@ -156,10 +161,9 @@ public class RestTest {
 
         AtomicBoolean flag1 = new AtomicBoolean(false);
 
-        RestFuture<String, String> future = RestFuture.create();
-        future.then(s -> flag1.set(true));
-
-        future.getExecutor().schedule(() -> future.accept(message), 100, TimeUnit.MILLISECONDS);
+        RestFuture<String, String> future = RestFuture.<String>create((f, i)->{
+            f.getExecutor().schedule( ()-> f.taskFinished(message), 100, TimeUnit.MILLISECONDS);
+        }).then(s -> flag1.set(true)).performAsync();
 
         assertThrows(TimeoutException.class, () -> future.get(50, TimeUnit.MILLISECONDS));
         assertFalse(flag1.get());
@@ -178,15 +182,5 @@ public class RestTest {
         assertDoesNotThrow(()->future.addListener(future.getExecutor(), listener));
     }
 
-    @Test
-    public void deadlockTest(){
-        RestFuture<String, String> future = RestFuture.create();
-        future.then(future);
 
-        future.getExecutor().submit(()->{
-            future.accept("Test");
-        });
-
-        assertThrows(TimeoutException.class, ()->future.get(10, TimeUnit.MILLISECONDS));
-    }
 }

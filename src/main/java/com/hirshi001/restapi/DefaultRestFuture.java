@@ -17,28 +17,17 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     private Throwable cause;
     private final CountDownLatch latch;
 
+    private RestFuture<?, T> parent;
     private RestFutureConsumer<T, U> task;
     private Queue<DefaultRestFuture<U, ?>> nextFutures;
     private Queue<ListenerExecutor<T, U>> listenerExecutors;
     private Queue<RestFutureListener<T, U>> listeners;
 
-
-    public DefaultRestFuture() {
-        this(DEFAULT_EXECUTOR, true);
-    }
-
-    public DefaultRestFuture(ScheduledExecutorService executor) {
-        this(executor, true);
-    }
-
-    public DefaultRestFuture(ScheduledExecutorService executor, boolean cancellable) {
-        this(executor, cancellable, null);
-    }
-
-    public DefaultRestFuture(ScheduledExecutorService executor, boolean cancellable, RestFutureConsumer<T, U> task) {
+    public DefaultRestFuture(ScheduledExecutorService executor, boolean cancellable, RestFutureConsumer<T, U> task, RestFuture<?, T> parent) {
         this.executor = executor;
         this.cancellable = cancellable;
         this.task = task;
+        this.parent = parent;
 
         nextFutures = new ConcurrentLinkedQueue<>();
         listenerExecutors = new ConcurrentLinkedQueue<>();
@@ -71,19 +60,38 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     }
 
     @Override
-    public void accept(T obj) {
-        if(isCancelled())
+    public RestFuture<T, U> perform() {
+        if(parent==null) perform(null);
+        else{
+            parent.perform();
+        }
+        return this;
+    }
+
+    @Override
+    public RestFuture<T, U> performAsync() {
+        executor.submit((Runnable) this::perform);
+        return this;
+    }
+
+    @Override
+    public RestFuture<T, U> perform(Object input) {
         if(task!=null){
             try {
-                task.accept(this, obj);
-            } catch (Exception e) {
+                task.accept(this, (T)input);
+            }catch (Exception e){
                 setCause(e);
             }
+        }else{
+            taskFinished((U)input);
         }
-        else {
-            taskFinished((U)obj);
-        }
+        return this;
+    }
 
+    @Override
+    public RestFuture<T, U> performAsync(T input) {
+        executor.submit((Runnable) ()->perform(input));
+        return this;
     }
 
     @Override
@@ -112,8 +120,8 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     @Override
     public RestFuture<U, U> thenBoth(RestFuture<U, ?> first, RestFuture<U, ?> second) {
         return add((r, i)->{
-            first.accept(i);
-            second.accept(i);
+            first.perform(i);
+            second.perform(i);
             r.taskFinished(i);
         });
     }
@@ -126,8 +134,8 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     @Override
     public RestFuture<U, U> thenBothAsync(RestFuture<U, ?> first, RestFuture<U, ?> second, Executor executor) {
         return add((r, i)->{
-            executor.execute(()->first.accept(i));
-            executor.execute(()->second.accept(i));
+            executor.execute(()->first.perform(i));
+            executor.execute(()->second.perform(i));
             r.taskFinished(i);
         });
     }
@@ -232,7 +240,7 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     }
 
     protected  <B> RestFuture<U, B> add(RestFutureConsumer<U, B> function) {
-        DefaultRestFuture<U, B> future = new DefaultRestFuture<>(executor, false, function);
+        DefaultRestFuture<U, B> future = new DefaultRestFuture<>(executor, false, function, this);
         nextFutures.add(future);
         return future;
     }
@@ -242,9 +250,9 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
         //TODO: we should check for possible recursive calls causing deadlocks
         this.result = result;
         isDone = true;
-        forEachListener(l->l.success(DefaultRestFuture.this));
-        forEachNextFuture(f->f.accept(result));
         latch.countDown();
+        forEachListener(l->l.success(DefaultRestFuture.this));
+        forEachNextFuture(f->f.perform(result));
     }
 
 

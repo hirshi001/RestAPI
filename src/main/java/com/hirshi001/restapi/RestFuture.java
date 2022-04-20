@@ -5,15 +5,30 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface RestFuture<T, U> extends Future<U>, Consumer<T>{
+public interface RestFuture<T, U> extends Future<U>{
 
-    static <T> RestFuture<T, T> create(ScheduledExecutorService executor) {
-        return new DefaultRestFuture<>(executor);
-    }
 
     static <T> RestFuture<T, T> create() {
-        return new DefaultRestFuture<>();
+        return create(DefaultRestFuture.DEFAULT_EXECUTOR);
     }
+
+    static <T> RestFuture<T, T> create(ScheduledExecutorService executor) {
+        return create(executor, null);
+    }
+
+    static <T> RestFuture<T, T> create(RestFutureConsumer<T, T> consumer) {
+        return create(DefaultRestFuture.DEFAULT_EXECUTOR, consumer);
+    }
+
+    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, RestFutureConsumer<T, T> consumer) {
+        return new DefaultRestFuture<>(executor, true, consumer, null);
+    }
+
+
+    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, boolean cancel, RestFutureConsumer<T, T> consumer) {
+        return new DefaultRestFuture<>(executor, true, consumer, null);
+    }
+
 
     public ScheduledExecutorService getExecutor();
 
@@ -32,8 +47,29 @@ public interface RestFuture<T, U> extends Future<U>, Consumer<T>{
     @Override
     boolean isDone();
 
-    @Override
-    void accept(T t);
+    /**
+     *
+     * @return this for chaining
+     */
+    RestFuture<T, U> perform();
+
+    /**
+     *
+     * @return this for chaining
+     */
+    RestFuture<T, U> performAsync();
+
+    /**
+     *
+     * @return this for chaining
+     */
+    RestFuture<T, U> perform(T input);
+
+    /**
+     *
+     * @return this for chaining
+     */
+    RestFuture<T, U> performAsync(T input);
 
     RestFuture<U, U> then(Consumer<U> consumer);
 
