@@ -21,15 +21,12 @@ public class RestTest {
         AtomicBoolean flag3 = new AtomicBoolean(false);
 
         AtomicLong start = new AtomicLong();
-        RestFuture<?, String> future = RestFuture.create((f, i)->{
-            System.out.println("Start");
-            f.taskFinished("Hi");
-
-        });
+        RestFuture<?, String> future = RestFuture.create(()->"Hi");
 
         future
                 .then((s)->{
                     flag1.set(true);
+                    assert s.equals("Hi");
                 })
                 .map(s->{
                     flag2.set(true);

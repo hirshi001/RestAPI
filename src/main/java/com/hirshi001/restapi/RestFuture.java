@@ -9,11 +9,11 @@ public interface RestFuture<T, U> extends Future<U>{
 
 
     static <T> RestFuture<T, T> create() {
-        return create(DefaultRestFuture.DEFAULT_EXECUTOR);
+        return create(DefaultRestFuture.DEFAULT_EXECUTOR, true, (RestFutureConsumer<T, T>) null);
     }
 
     static <T> RestFuture<T, T> create(ScheduledExecutorService executor) {
-        return create(executor, null);
+        return create(executor, true, (RestFutureConsumer<T, T>) null);
     }
 
     static <T> RestFuture<T, T> create(RestFutureConsumer<T, T> consumer) {
@@ -21,13 +21,33 @@ public interface RestFuture<T, U> extends Future<U>{
     }
 
     static <T> RestFuture<T, T> create(ScheduledExecutorService executor, RestFutureConsumer<T, T> consumer) {
-        return new DefaultRestFuture<>(executor, true, consumer, null);
+        return create(executor, true, consumer);
     }
-
 
     static <T> RestFuture<T, T> create(ScheduledExecutorService executor, boolean cancel, RestFutureConsumer<T, T> consumer) {
-        return new DefaultRestFuture<>(executor, true, consumer, null);
+        return new DefaultRestFuture<>(executor, cancel, consumer, null);
     }
+
+    static <T> RestFuture<T, T> create(Callable<T> action) {
+        return create(DefaultRestFuture.DEFAULT_EXECUTOR, true, action);
+    }
+
+    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, Callable<T> action) {
+        return create(executor, true, action);
+    }
+
+    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, boolean cancel, Callable<T> action) {
+        return new DefaultRestFuture<>(executor, cancel, (future, input) -> {
+            try {
+                T result = action.call();
+                future.taskFinished(result);
+            } catch (Exception e) {
+                future.setCause(e);
+            }
+        }, null);
+    }
+
+
 
 
     public ScheduledExecutorService getExecutor();
