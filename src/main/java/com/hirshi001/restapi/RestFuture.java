@@ -93,7 +93,11 @@ public interface RestFuture<T, U> extends Future<U>{
 
     RestFuture<U, U> then(Consumer<U> consumer);
 
+    RestFuture<U, U> then(RestFuture<U, ?> future);
+
     RestFuture<U, U> thenAsync(Consumer<U> consumer);
+
+    RestFuture<U, U> thenAsync(RestFuture<U, ?> future);
 
     RestFuture<U, U> thenAsync(Consumer<U> consumer, Executor executor);
 

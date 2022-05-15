@@ -19,6 +19,7 @@ public class RestTest {
         AtomicBoolean flag1 = new AtomicBoolean(false);
         AtomicBoolean flag2 = new AtomicBoolean(false);
         AtomicBoolean flag3 = new AtomicBoolean(false);
+        AtomicBoolean flag4 = new AtomicBoolean(false);
 
         AtomicLong start = new AtomicLong();
         RestFuture<?, String> future = RestFuture.create(()->"Hi");
@@ -28,6 +29,10 @@ public class RestTest {
                     flag1.set(true);
                     assert s.equals("Hi");
                 })
+                .then(RestFuture.create(()->{
+                    flag4.set(true);
+                    return null;
+                }))
                 .map(s->{
                     flag2.set(true);
                     return s.hashCode();
@@ -49,6 +54,7 @@ public class RestTest {
         assertTrue(flag1.get());
         assertTrue(flag2.get());
         assertTrue(flag3.get());
+        assertTrue(flag4.get());
     }
 
     @Test

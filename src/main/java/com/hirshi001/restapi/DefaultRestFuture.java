@@ -103,8 +103,24 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     }
 
     @Override
+    public RestFuture<U, U> then(RestFuture<U, ?> future) {
+        return add((r, i)-> {
+            future.perform(i);
+            r.taskFinished(i);
+        });
+    }
+
+    @Override
     public RestFuture<U, U> thenAsync(Consumer<U> consumer) {
         return thenAsync(consumer, executor);
+    }
+
+    @Override
+    public RestFuture<U, U> thenAsync(RestFuture<U, ?> future) {
+        return add((r, i)-> {
+            future.performAsync(i);
+            r.taskFinished(i);
+        });
     }
 
     @Override
