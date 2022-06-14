@@ -55,6 +55,7 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     @Override
     public void setCause(Throwable cause) {
         this.cause = cause;
+        latch.countDown();
         forEachListener(l->l.failure(DefaultRestFuture.this));
         forEachNextFuture(f->f.setCause(cause));
     }
@@ -238,8 +239,8 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     public boolean cancel(boolean mayInterruptIfRunning) {
         if(cancellable) {
             isCancelled = true;
+            latch.countDown();
             forEachListener(l->l.cancelled(this));
-
             return true;
         }
         return false;
