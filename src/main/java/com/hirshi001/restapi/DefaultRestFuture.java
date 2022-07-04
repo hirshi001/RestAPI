@@ -60,7 +60,10 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
         this.isDone = true;
         onFailure.accept(cause);
         latch.countDown();
-        forEachListener(l->l.failure(DefaultRestFuture.this));
+        forEachListener(l->{
+            l.onComplete(this);
+            l.failure(DefaultRestFuture.this);
+        });
         forEachNextFuture(f->f.setCause(cause));
     }
 
@@ -210,14 +213,14 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     }
 
     @Override
-    public RestFuture<T, U> addListener(RestFutureListener<T, U> listener) {
+    public RestFuture<T, U> addListener(RestFutureListener listener) {
         if(listener==null) throw new NullPointerException("listener cannot be null");
         listeners.add(listener);
         return this;
     }
 
     @Override
-    public RestFuture<T, U> addListener(Executor executor, RestFutureListener<T, U> listener) {
+    public RestFuture<T, U> addListener(Executor executor, RestFutureListener listener) {
         if(executor==null) throw new NullPointerException("executor cannot be null");
         if(listener==null) throw new NullPointerException("listener cannot be null");
         listenerExecutors.add(new ListenerExecutor<>(executor, listener));
@@ -225,7 +228,7 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     }
 
     @Override
-    public boolean removeListener(RestFutureListener<T, U> listener) {
+    public boolean removeListener(RestFutureListener listener) {
         boolean success = false;
         if(listeners.removeIf(l -> l == listener)) success = true; //we need to remove possible duplicate listeners from both lists
         if(listenerExecutors.removeIf(l->l.listener == listener)) success = true;
@@ -244,7 +247,10 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
         if(cancellable) {
             isCancelled = true;
             latch.countDown();
-            forEachListener(l->l.cancelled(this));
+            forEachListener(l->{
+                l.onComplete(this);
+                l.cancelled(this);
+            });
             return true;
         }
         return false;

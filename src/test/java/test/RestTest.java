@@ -174,8 +174,13 @@ public class RestTest {
 
     @Test
     public void ListenerErrorTest(){
-        RestFuture<String, String> future = RestFuture.create();
-        RestFutureListener<String, String> listener = future1 -> {};
+        RestFuture<?, String> future = RestFuture.create();
+        RestFutureListener<?, String> listener = new RestFutureListener<Object, String>() {
+            @Override
+            public void onComplete(RestFuture<Object, String> future) {
+
+            }
+        };
 
         assertThrows(NullPointerException.class, ()->future.addListener(null));
         assertDoesNotThrow(()->future.addListener(listener));

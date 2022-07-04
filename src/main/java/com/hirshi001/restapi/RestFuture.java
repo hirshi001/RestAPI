@@ -133,7 +133,7 @@ public interface RestFuture<T, U> extends Future<U>{
      * @return this for chaining
      * @throws NullPointerException if listener is null
      */
-    RestFuture<T, U> addListener(RestFutureListener<T, U> listener);
+    RestFuture<T, U> addListener(RestFutureListener listener);
 
     /**
      *
@@ -142,14 +142,14 @@ public interface RestFuture<T, U> extends Future<U>{
      * @return this for chaining
      * @throws NullPointerException if executor or listener is null
      */
-    RestFuture<T, U> addListener(Executor executor, RestFutureListener<T, U> listener);
+    RestFuture<T, U> addListener(Executor executor, RestFutureListener listener);
 
     /**
      *
      * @param listener the listener to remove
      * @return true if the listener was removed, false if the listener was not registered
      */
-    boolean removeListener(RestFutureListener<T, U> listener);
+    boolean removeListener(RestFutureListener listener);
 
     /**
      * Removes all listeners from this portion of the RestFuture
