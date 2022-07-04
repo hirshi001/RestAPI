@@ -12,6 +12,7 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     private ScheduledExecutorService executor;
     private boolean isCancelled;
     private boolean isDone;
+    private boolean isSuccess;
     private final boolean cancellable;
     private U result;
     private Throwable cause;
@@ -22,6 +23,7 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     private Queue<DefaultRestFuture<U, ?>> nextFutures;
     private Queue<ListenerExecutor<T, U>> listenerExecutors;
     private Queue<RestFutureListener<T, U>> listeners;
+    private Consumer<Throwable> onFailure;
 
     public DefaultRestFuture(ScheduledExecutorService executor, boolean cancellable, RestFutureConsumer<T, U> task, RestFuture<?, T> parent) {
         this.executor = executor;
@@ -55,6 +57,8 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     @Override
     public void setCause(Throwable cause) {
         this.cause = cause;
+        this.isDone = true;
+        onFailure.accept(cause);
         latch.countDown();
         forEachListener(l->l.failure(DefaultRestFuture.this));
         forEachNextFuture(f->f.setCause(cause));
@@ -199,7 +203,7 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     @Override
     public U get(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {
         boolean success = latch.await(timeout, unit);
-        if(!success || !isDone()) {
+        if(!success || !isSuccess()) {
             throw new TimeoutException();
         }
         return result;
@@ -256,6 +260,16 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
         return isDone;
     }
 
+    @Override
+    public boolean isSuccess() {
+        return isSuccess;
+    }
+
+    @Override
+    public boolean isFailure() {
+        return cause()!=null;
+    }
+
     protected  <B> RestFuture<U, B> add(RestFutureConsumer<U, B> function) {
         DefaultRestFuture<U, B> future = new DefaultRestFuture<>(executor, false, function, this);
         nextFutures.add(future);
@@ -267,11 +281,17 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
         //TODO: we should check for possible recursive calls causing deadlocks
         this.result = result;
         isDone = true;
+        this.isSuccess = true;
         latch.countDown();
         forEachListener(l->l.success(DefaultRestFuture.this));
         forEachNextFuture(f->f.perform(result));
     }
 
+    @Override
+    public RestFuture<T, U> onFailure(Consumer<Throwable> consumer) {
+        this.onFailure = consumer;
+        return this;
+    }
 
 
     protected void forEachListener(Consumer<RestFutureListener<T, U>> consumer) {

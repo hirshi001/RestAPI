@@ -67,6 +67,10 @@ public interface RestFuture<T, U> extends Future<U>{
     @Override
     boolean isDone();
 
+    boolean isSuccess();
+
+    boolean isFailure();
+
     /**
      *
      * @return this for chaining
@@ -154,6 +158,8 @@ public interface RestFuture<T, U> extends Future<U>{
     RestFuture<T, U> removeAllListeners();
 
     void taskFinished(U result);
+
+    RestFuture<T, U> onFailure(Consumer<Throwable> consumer);
 
 
 
