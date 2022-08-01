@@ -24,7 +24,7 @@ public class RestTest {
         AtomicLong start = new AtomicLong();
         RestFuture<?, String> future = RestFuture.create(()->"Hi");
 
-        future
+        RestFuture f2 = future
                 .then((s)->{
                     flag1.set(true);
                     assert s.equals("Hi");
@@ -55,6 +55,13 @@ public class RestTest {
         assertTrue(flag2.get());
         assertTrue(flag3.get());
         assertTrue(flag4.get());
+
+        assertTrue(f2.isDone());
+        assertTrue(f2.isSuccess());
+        assertNull(f2.cause());
+        assertFalse(f2.isCancelled());
+        assertFalse(f2.isFailure());
+
     }
 
     @Test

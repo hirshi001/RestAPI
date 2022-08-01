@@ -25,16 +25,15 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     private Queue<RestFutureListener<T, U>> listeners;
     private Consumer<Throwable> onFailure;
 
+
     public DefaultRestFuture(ScheduledExecutorService executor, boolean cancellable, RestFutureConsumer<T, U> task, RestFuture<?, T> parent) {
         this.executor = executor;
         this.cancellable = cancellable;
         this.task = task;
         this.parent = parent;
-
         nextFutures = new ConcurrentLinkedQueue<>();
         listenerExecutors = new ConcurrentLinkedQueue<>();
         listeners = new ConcurrentLinkedQueue<>();
-
         latch = new CountDownLatch(1);
     }
 
@@ -58,7 +57,7 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
     public void setCause(Throwable cause) {
         this.cause = cause;
         this.isDone = true;
-        onFailure.accept(cause);
+        if(onFailure!=null) onFailure.accept(cause);
         latch.countDown();
         forEachListener(l->{
             l.onComplete(this);
@@ -289,7 +288,10 @@ public class DefaultRestFuture<T, U> implements RestFuture<T, U>{
         isDone = true;
         this.isSuccess = true;
         latch.countDown();
-        forEachListener(l->l.success(DefaultRestFuture.this));
+        forEachListener(l->{
+            l.onComplete(this);
+            l.success(this);
+        });
         forEachNextFuture(f->f.perform(result));
     }
 

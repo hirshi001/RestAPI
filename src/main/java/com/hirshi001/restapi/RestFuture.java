@@ -7,7 +7,6 @@ import java.util.function.Function;
 
 public interface RestFuture<T, U> extends Future<U>{
 
-
     static <T> RestFuture<T, T> create() {
         return create(DefaultRestFuture.DEFAULT_EXECUTOR, true, (RestFutureConsumer<T, T>) null);
     }
@@ -46,8 +45,6 @@ public interface RestFuture<T, U> extends Future<U>{
             }
         }, null);
     }
-
-
 
 
     public ScheduledExecutorService getExecutor();
