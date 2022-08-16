@@ -23,7 +23,6 @@ public class RestTest {
 
         AtomicLong start = new AtomicLong();
         RestFuture<?, String> future = RestFuture.create(()->"Hi");
-
         RestFuture f2 = future
                 .then((s)->{
                     flag1.set(true);
