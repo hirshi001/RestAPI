@@ -1,55 +1,19 @@
 package com.hirshi001.restapi;
 
-
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface RestFuture<T, U> extends Future<U>{
-
-    static <T> RestFuture<T, T> create() {
-        return create(DefaultRestFuture.DEFAULT_EXECUTOR, true, (RestFutureConsumer<T, T>) null);
-    }
-
-    static <T> RestFuture<T, T> create(ScheduledExecutorService executor) {
-        return create(executor, true, (RestFutureConsumer<T, T>) null);
-    }
-
-    static <T> RestFuture<T, T> create(RestFutureConsumer<T, T> consumer) {
-        return create(DefaultRestFuture.DEFAULT_EXECUTOR, consumer);
-    }
-
-    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, RestFutureConsumer<T, T> consumer) {
-        return create(executor, true, consumer);
-    }
-
-    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, boolean cancel, RestFutureConsumer<T, T> consumer) {
-        return new DefaultRestFuture<>(executor, cancel, consumer, null);
-    }
-
-    static <T> RestFuture<T, T> create(Callable<T> action) {
-        return create(DefaultRestFuture.DEFAULT_EXECUTOR, true, action);
-    }
-
-    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, Callable<T> action) {
-        return create(executor, true, action);
-    }
-
-    static <T> RestFuture<T, T> create(ScheduledExecutorService executor, boolean cancel, Callable<T> action) {
-        return new DefaultRestFuture<>(executor, cancel, (future, input) -> {
-            try {
-                T result = action.call();
-                future.taskFinished(result);
-            } catch (Exception e) {
-                future.setCause(e);
-            }
-        }, null);
-    }
+public interface RestFuture<T, U> extends Future<U> {
 
 
-    public ScheduledExecutorService getExecutor();
 
-    public void setExecutor(ScheduledExecutorService executor);
+    public ScheduledExec getScheduledExec();
+
+    public void setExecutor(ScheduledExec executor);
 
     public Throwable cause();
 
@@ -100,19 +64,19 @@ public interface RestFuture<T, U> extends Future<U>{
 
     RestFuture<U, U> thenAsync(RestFuture<U, ?> future);
 
-    RestFuture<U, U> thenAsync(Consumer<U> consumer, Executor executor);
+    RestFuture<U, U> thenAsync(Consumer<U> consumer, ScheduledExec executor);
 
     RestFuture<U, U> thenBoth(RestFuture<U, ?> first, RestFuture<U, ?> second);
 
     RestFuture<U, U> thenBothAsync(RestFuture<U, ?> first, RestFuture<U, ?> second);
 
-    RestFuture<U, U> thenBothAsync(RestFuture<U, ?> first, RestFuture<U, ?> second, Executor executor);
+    RestFuture<U, U> thenBothAsync(RestFuture<U, ?> first, RestFuture<U, ?> second, ScheduledExec executor);
 
     <B> RestFuture<U, B> map(Function<U, B> function);
 
     <B> RestFuture<U, B> mapAsync(Function<U, B> function);
 
-    <B> RestFuture<U, B> mapAsync(Function<U, B> function, Executor executor);
+    <B> RestFuture<U, B> mapAsync(Function<U, B> function, ScheduledExec executor);
 
     RestFuture<U, U> pauseFor(long timeout);
 
@@ -139,7 +103,7 @@ public interface RestFuture<T, U> extends Future<U>{
      * @return this for chaining
      * @throws NullPointerException if executor or listener is null
      */
-    RestFuture<T, U> addListener(Executor executor, RestFutureListener listener);
+    RestFuture<T, U> addListener(ScheduledExec executor, RestFutureListener listener);
 
     /**
      *

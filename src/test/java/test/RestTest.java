@@ -1,18 +1,27 @@
 package test;
 
-import com.hirshi001.restapi.DefaultRestFuture;
+import com.hirshi001.restapi.RestAPI;
 import com.hirshi001.restapi.RestFuture;
-import com.hirshi001.restapi.RestFutureConsumer;
 import com.hirshi001.restapi.RestFutureListener;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// None of these tests will work because nothing is implemented
 public class RestTest {
+
+
+    @BeforeEach
+    public void setup(){
+        // RestAPI.setFactory(new RestFutureFactory());
+    }
 
     @Test
     public void BasicMethodsTest() throws InterruptedException {
@@ -22,13 +31,13 @@ public class RestTest {
         AtomicBoolean flag4 = new AtomicBoolean(false);
 
         AtomicLong start = new AtomicLong();
-        RestFuture<?, String> future = RestFuture.create(()->"Hi");
+        RestFuture<?, String> future = RestAPI.create(()->"Hi");
         RestFuture f2 = future
                 .then((s)->{
                     flag1.set(true);
                     assert s.equals("Hi");
                 })
-                .then(RestFuture.create(()->{
+                .then(RestAPI.create(()->{
                     flag4.set(true);
                     return null;
                 }))
@@ -70,11 +79,11 @@ public class RestTest {
         AtomicBoolean flag3 = new AtomicBoolean(false);
         AtomicBoolean flag4 = new AtomicBoolean(false);
 
-        RestFuture<String, String> future = RestFuture.create();
+        RestFuture<String, String> future = RestAPI.create();
         future
                 .then(s -> flag1.set(true))
-                .thenBoth(RestFuture.<String>create().then(s -> flag2.set(true)),
-                        RestFuture.<String>create().then(s -> flag3.set(true)))
+                .thenBoth(RestAPI.<String>create().then(s -> flag2.set(true)),
+                        RestAPI.<String>create().then(s -> flag3.set(true)))
                 .then(s -> flag4.set(true));
 
         future.perform("Test");
@@ -97,7 +106,7 @@ public class RestTest {
 
         Thread mainThread = Thread.currentThread();
 
-        RestFuture<String, String> future = RestFuture.create();
+        RestFuture<String, String> future = RestAPI.create();
 
         future
                 .then(s -> flag1.set(true))
@@ -108,11 +117,11 @@ public class RestTest {
                 .then(s -> flag3.set(true))
                 .map(s->5)
                 .thenBothAsync(
-                        RestFuture.<Integer>create().then(s -> {
+                        RestAPI.<Integer>create().then(s -> {
                             flag4.set(true);
                             assertNotSame(mainThread, Thread.currentThread());
                         }),
-                        RestFuture.<Integer>create().then(s -> {
+                        RestAPI.<Integer>create().then(s -> {
                             flag5.set(true);
                             assertNotSame(mainThread, Thread.currentThread());
                         }))
@@ -136,8 +145,8 @@ public class RestTest {
 
         AtomicBoolean flag1 = new AtomicBoolean(false);
 
-        RestFuture<?, String> future = RestFuture.create((f, i)->
-                f.getExecutor().schedule( ()-> f.taskFinished(message),
+        RestFuture<?, String> future = RestAPI.create((f, i)->
+                f.getScheduledExec().run( ()-> f.taskFinished(message),
                         100,
                         TimeUnit.MILLISECONDS));
 
@@ -155,8 +164,8 @@ public class RestTest {
 
         AtomicBoolean flag1 = new AtomicBoolean(false);
 
-        RestFuture<String, String> future = RestFuture.<String>create((f, i)->{
-            f.getExecutor().schedule( ()-> f.taskFinished(message), 100, TimeUnit.MILLISECONDS);
+        RestFuture<String, String> future = RestAPI.<String>create((f, i)->{
+            f.getScheduledExec().run( ()-> f.taskFinished(message), 100, TimeUnit.MILLISECONDS);
         }).then(s -> flag1.set(true));
         future.performAsync();
 
@@ -170,8 +179,8 @@ public class RestTest {
 
         AtomicBoolean flag1 = new AtomicBoolean(false);
 
-        RestFuture<String, String> future = RestFuture.<String>create((f, i)->{
-            f.getExecutor().schedule( ()-> f.taskFinished(message), 100, TimeUnit.MILLISECONDS);
+        RestFuture<String, String> future = RestAPI.<String>create((f, i)->{
+            f.getScheduledExec().run( ()-> f.taskFinished(message), 100, TimeUnit.MILLISECONDS);
         }).then(s -> flag1.set(true)).performAsync();
 
         assertThrows(TimeoutException.class, () -> future.get(50, TimeUnit.MILLISECONDS));
@@ -180,7 +189,7 @@ public class RestTest {
 
     @Test
     public void ListenerErrorTest(){
-        RestFuture<?, String> future = RestFuture.create();
+        RestFuture<?, String> future = RestAPI.create();
         RestFutureListener<?, String> listener = new RestFutureListener<Object, String>() {
             @Override
             public void onComplete(RestFuture<Object, String> future) {
@@ -192,8 +201,8 @@ public class RestTest {
         assertDoesNotThrow(()->future.addListener(listener));
 
         assertThrows(NullPointerException.class, ()->future.addListener(null, listener));
-        assertThrows(NullPointerException.class, ()->future.addListener(future.getExecutor(), null));
-        assertDoesNotThrow(()->future.addListener(future.getExecutor(), listener));
+        assertThrows(NullPointerException.class, ()->future.addListener(future.getScheduledExec(), null));
+        assertDoesNotThrow(()->future.addListener(future.getScheduledExec(), listener));
     }
 
 
