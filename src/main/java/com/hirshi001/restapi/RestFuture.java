@@ -9,8 +9,6 @@ import java.util.function.Function;
 
 public interface RestFuture<T, U> extends Future<U> {
 
-
-
     public ScheduledExec getScheduledExec();
 
     public void setExecutor(ScheduledExec executor);
@@ -121,8 +119,5 @@ public interface RestFuture<T, U> extends Future<U> {
     void taskFinished(U result);
 
     RestFuture<T, U> onFailure(Consumer<Throwable> consumer);
-
-
-
 
 }
