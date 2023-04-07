@@ -10,6 +10,12 @@ public interface ScheduledExec {
 
     void runDeferred(Runnable runnable);
 
+    default TimerAction repeat(Runnable runnable, long initialDelay, long delay) {
+        return repeat(runnable, initialDelay, delay, TimeUnit.MILLISECONDS);
+    }
+
+    TimerAction repeat(Runnable runnable, long initialDelay, long delay, TimeUnit period);
+
 
 
 }
