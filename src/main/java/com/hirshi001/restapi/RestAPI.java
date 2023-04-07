@@ -43,5 +43,9 @@ public class RestAPI {
         return factory.create(executor, cancel, action);
     }
 
+    public static ScheduledExec getDefaultExecutor(){
+        return factory.getDefaultExecutor();
+    }
+
 
 }

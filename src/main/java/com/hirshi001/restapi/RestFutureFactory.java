@@ -21,5 +21,7 @@ public interface RestFutureFactory {
 
      <T> RestFuture<T, T> create(ScheduledExec executor, boolean cancel, Callable<T> action);
 
+    ScheduledExec getDefaultExecutor();
+
 
 }
