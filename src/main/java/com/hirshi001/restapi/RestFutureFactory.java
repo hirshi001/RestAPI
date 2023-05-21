@@ -18,6 +18,11 @@ package com.hirshi001.restapi;
 
 import java.util.concurrent.Callable;
 
+/**
+ * This interface is used to create {@link RestFuture} objects.
+ *
+ * @author Hrishikesh Ingle
+ */
 public interface RestFutureFactory {
 
 

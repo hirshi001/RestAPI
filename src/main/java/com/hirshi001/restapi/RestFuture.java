@@ -23,15 +23,22 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * A Future that can be used to perform asynchronous operations.
+ * @param <T> The type of the input
+ * @param <U> The type of the output
+ * @author Hrishikesh Ingle
+ */
+@SuppressWarnings("unused")
 public interface RestFuture<T, U> extends Future<U> {
 
-    public ScheduledExec getScheduledExec();
+    ScheduledExec getScheduledExec();
 
-    public void setExecutor(ScheduledExec executor);
+    void setExecutor(ScheduledExec executor);
 
-    public Throwable cause();
+    Throwable cause();
 
-    public void setCause(Throwable cause);
+    void setCause(Throwable cause);
 
     @Override
     boolean cancel(boolean mayInterruptIfRunning);
@@ -62,6 +69,7 @@ public interface RestFuture<T, U> extends Future<U> {
      *
      * @return this for chaining
      */
+    @SuppressWarnings("UnusedReturnValue")
     RestFuture<T, U> perform(T input);
 
     /**
@@ -108,7 +116,7 @@ public interface RestFuture<T, U> extends Future<U> {
      * @return this for chaining
      * @throws NullPointerException if listener is null
      */
-    RestFuture<T, U> addListener(RestFutureListener listener);
+    RestFuture<T, U> addListener(@SuppressWarnings("rawtypes") RestFutureListener listener);
 
     /**
      *
@@ -117,14 +125,14 @@ public interface RestFuture<T, U> extends Future<U> {
      * @return this for chaining
      * @throws NullPointerException if executor or listener is null
      */
-    RestFuture<T, U> addListener(ScheduledExec executor, RestFutureListener listener);
+    RestFuture<T, U> addListener(ScheduledExec executor, @SuppressWarnings("rawtypes") RestFutureListener listener);
 
     /**
      *
      * @param listener the listener to remove
      * @return true if the listener was removed, false if the listener was not registered
      */
-    boolean removeListener(RestFutureListener listener);
+    boolean removeListener(@SuppressWarnings("rawtypes") RestFutureListener listener);
 
     /**
      * Removes all listeners from this portion of the RestFuture

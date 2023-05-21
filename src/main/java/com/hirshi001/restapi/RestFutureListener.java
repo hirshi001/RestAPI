@@ -16,6 +16,11 @@
 
 package com.hirshi001.restapi;
 
+/**
+ * A functional interface that accepts a {@link RestFuture} as an input.
+ * @param <T> The type of the input
+ * @param <U> The type of the output
+ */
 @FunctionalInterface
 public interface RestFutureListener<T, U> {
 

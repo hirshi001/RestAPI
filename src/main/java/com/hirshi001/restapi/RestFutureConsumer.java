@@ -16,9 +16,16 @@
 
 package com.hirshi001.restapi;
 
+/**
+ * A functional interface that accepts a {@link RestFuture} and an input of type {@code T}.
+ * @param <T> The type of the input
+ * @param <U> The type of the output
+ * @author Hrishikesh Ingle
+ */
 @FunctionalInterface
 public interface RestFutureConsumer<T, U> {
 
-    public void accept(RestFuture<T, U> future, T input);
+    @SuppressWarnings("unused")
+    void accept(RestFuture<T, U> future, T input);
 
 }

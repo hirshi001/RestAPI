@@ -18,6 +18,12 @@ package com.hirshi001.restapi;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This interface is used to schedule tasks.
+ *
+ * @author Hrishikesh Ingle
+ */
+@SuppressWarnings("unused")
 public interface ScheduledExec {
 
     void run(Runnable runnable, long delay);

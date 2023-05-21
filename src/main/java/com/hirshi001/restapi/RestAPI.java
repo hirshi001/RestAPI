@@ -18,6 +18,12 @@ package com.hirshi001.restapi;
 
 import java.util.concurrent.Callable;
 
+/**
+ * A static factory class for creating {@link RestFuture} objects. You must call {@link #setFactory(RestFutureFactory)} before using this class.
+ *
+ * @author Hrishikesh Ingle
+ */
+@SuppressWarnings("unused")
 public class RestAPI {
 
     private static RestFutureFactory factory;

@@ -16,6 +16,13 @@
 
 package com.hirshi001.restapi;
 
+/**
+ * This class is used to keep track of commands created by a {@link ScheduledExec} object.
+ *
+ * @author Hrishikesh Ingle
+ */
+@SuppressWarnings({"FieldMayBeFinal", "unused"})
+
 public abstract class TimerAction {
 
     private long initialDelay;
