@@ -26,9 +26,11 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 public interface ScheduledExec {
 
-    void run(Runnable runnable, long delay);
+    default TimerAction run(Runnable runnable, long delay) {
+        return run(runnable, delay, TimeUnit.MILLISECONDS);
+    }
 
-    void run(Runnable runnable, long delay, TimeUnit period);
+    TimerAction run(Runnable runnable, long delay, TimeUnit period);
 
     void runDeferred(Runnable runnable);
 
@@ -37,7 +39,5 @@ public interface ScheduledExec {
     }
 
     TimerAction repeat(Runnable runnable, long initialDelay, long delay, TimeUnit period);
-
-
 
 }

@@ -25,16 +25,18 @@ package com.hirshi001.restapi;
 
 public abstract class TimerAction {
 
-    private long initialDelay;
-    private long delay;
+    private final long initialDelay;
+    private final long delay;
     private boolean cancelled;
-    private Runnable runnable;
+    private final Runnable runnable;
+    private final boolean repeating;
 
 
-    public TimerAction(long initialDelay, long delay, Runnable runnable) {
+    public TimerAction(long initialDelay, long delay, Runnable runnable, boolean repeating) {
         this.initialDelay = initialDelay;
         this.delay = delay;
         this.runnable = runnable;
+        this.repeating = repeating;
     }
 
     public void cancel() {
@@ -55,6 +57,10 @@ public abstract class TimerAction {
 
     public Runnable getAction() {
         return runnable;
+    }
+
+    public boolean isRepeating() {
+        return repeating;
     }
 
 
