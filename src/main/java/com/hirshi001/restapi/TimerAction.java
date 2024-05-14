@@ -27,7 +27,6 @@ public abstract class TimerAction {
 
     private final long initialDelay;
     private final long delay;
-    private boolean cancelled;
     private final Runnable runnable;
     private final boolean repeating;
 
@@ -39,13 +38,11 @@ public abstract class TimerAction {
         this.repeating = repeating;
     }
 
-    public void cancel() {
-        this.cancelled = true;
-    }
+    public abstract void cancel();
 
-    public boolean isCancelled() {
-        return cancelled;
-    }
+    public abstract boolean isCancelled();
+
+    public abstract boolean isDone();
 
     public long getInitialDelay() {
         return initialDelay;
@@ -54,6 +51,8 @@ public abstract class TimerAction {
     public long getDelay() {
         return delay;
     }
+
+    public abstract long getRemainingDelay();
 
     public Runnable getAction() {
         return runnable;
