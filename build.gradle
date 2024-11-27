@@ -6,19 +6,16 @@ plugins {
 group 'com.hirshi001'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_1_8;
-targetCompatibility = JavaVersion.VERSION_1_8;
-
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-}
 
 publishing {
     publications {
@@ -26,9 +23,4 @@ publishing {
             from components.java
         }
     }
-}
-
-test {
-    useJUnitPlatform()
-    testLogging.showStandardStreams = true
 }

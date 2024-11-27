@@ -1,2 +1,4 @@
 rootProject.name = 'RestAPI'
-
+include 'restapi'
+include 'javarestapi'
+include 'gwtrestapi'

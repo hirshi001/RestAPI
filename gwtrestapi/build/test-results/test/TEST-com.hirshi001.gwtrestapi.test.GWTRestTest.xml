@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.hirshi001.gwtrestapi.test.GWTRestTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2024-11-27T23:47:21" hostname="Hrishikeshs-MacBook-Pro.local" time="6.494">
+  <properties/>
+  <testcase name="testBasicMethods" classname="com.hirshi001.gwtrestapi.test.GWTRestTest" time="6.494">
+    <failure message="com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' was not found in module 'com.hirshi001.gwtrestapi.GWTRestAPI'; no compilation unit for that type was seen" type="com.google.gwt.junit.JUnitFatalLaunchException">com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' was not found in module 'com.hirshi001.gwtrestapi.GWTRestAPI'; no compilation unit for that type was seen
+	at app//com.google.gwt.junit.JUnitShell.checkTestClassInCurrentModule(JUnitShell.java:741)
+	at app//com.google.gwt.junit.JUnitShell.runTestImpl(JUnitShell.java:1360)
+	at app//com.google.gwt.junit.JUnitShell.runTestImpl(JUnitShell.java:1316)
+	at app//com.google.gwt.junit.JUnitShell.runTest(JUnitShell.java:679)
+	at app//com.google.gwt.junit.client.GWTTestCase.runTest(GWTTestCase.java:421)
+	at app//junit.framework.TestCase.runBare(TestCase.java:142)
+	at app//junit.framework.TestResult$1.protect(TestResult.java:122)
+	at app//junit.framework.TestResult.runProtected(TestResult.java:142)
+	at app//junit.framework.TestResult.run(TestResult.java:125)
+	at app//junit.framework.TestCase.run(TestCase.java:130)
+	at app//com.google.gwt.junit.client.GWTTestCase.run(GWTTestCase.java:247)
+	at app//junit.framework.TestSuite.runTest(TestSuite.java:241)
+	at app//junit.framework.TestSuite.run(TestSuite.java:236)
+	at app//org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:90)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.runTestClass(JUnitTestClassExecutor.java:112)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:58)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:40)
+	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestClassProcessor.processTestClass(AbstractJUnitTestClassProcessor.java:54)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:53)
+	at java.base@17.0.5/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base@17.0.5/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base@17.0.5/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base@17.0.5/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:92)
+	at jdk.proxy1/jdk.proxy1.$Proxy4.processTestClass(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$2.run(TestWorker.java:183)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:132)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:121)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:71)
+	at app//worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at app//worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

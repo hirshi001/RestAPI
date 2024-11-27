@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id "org.docstr.gwt" version "2.1.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+
+
+    implementation "org.gwtproject:gwt-user:2.12.0"
+    implementation project(':restapi')
+}
+
+test {
+    useJUnit()
+}
+
+gwt {
+    sourceLevel = '17'
+    modules = ['com.hirshi001.gwtrestapi.GWTRestAPI', 'com.hirshi001.gwtrestapi.test.Test']
+}
