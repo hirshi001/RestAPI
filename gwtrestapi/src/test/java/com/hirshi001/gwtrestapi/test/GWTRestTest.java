@@ -212,6 +212,7 @@ public class GWTRestTest extends GWTTestCase {
             o.run();
             throw new AssertionError("Expected exception of type: " + timeoutExceptionClass.getName());
         } catch (Throwable t) {
+            
             throw new AssertionError("Expected exception of type: " + timeoutExceptionClass.getName() + " but got: ", t);
         }
     }
