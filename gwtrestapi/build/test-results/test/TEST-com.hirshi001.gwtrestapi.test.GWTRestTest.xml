@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.hirshi001.gwtrestapi.test.GWTRestTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2024-11-27T23:47:21" hostname="Hrishikeshs-MacBook-Pro.local" time="6.494">
+<testsuite name="com.hirshi001.gwtrestapi.test.GWTRestTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2024-12-02T03:14:22" hostname="Hrishikeshs-MacBook-Pro.local" time="5.644">
   <properties/>
-  <testcase name="testBasicMethods" classname="com.hirshi001.gwtrestapi.test.GWTRestTest" time="6.494">
-    <failure message="com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' was not found in module 'com.hirshi001.gwtrestapi.GWTRestAPI'; no compilation unit for that type was seen" type="com.google.gwt.junit.JUnitFatalLaunchException">com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' was not found in module 'com.hirshi001.gwtrestapi.GWTRestAPI'; no compilation unit for that type was seen
+  <testcase name="testBothMethods" classname="com.hirshi001.gwtrestapi.test.GWTRestTest" time="5.644">
+    <failure message="com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' had compile errors; check log for details" type="com.google.gwt.junit.JUnitFatalLaunchException">com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' had compile errors; check log for details
 	at app//com.google.gwt.junit.JUnitShell.checkTestClassInCurrentModule(JUnitShell.java:741)
 	at app//com.google.gwt.junit.JUnitShell.runTestImpl(JUnitShell.java:1360)
 	at app//com.google.gwt.junit.JUnitShell.runTestImpl(JUnitShell.java:1316)
@@ -22,10 +22,8 @@
 	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:40)
 	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestClassProcessor.processTestClass(AbstractJUnitTestClassProcessor.java:54)
 	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:53)
-	at java.base@17.0.5/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base@17.0.5/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base@17.0.5/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base@17.0.5/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base@22.0.1/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base@22.0.1/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
 	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
 	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
@@ -42,6 +40,11 @@
 	at app//worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 </failure>
   </testcase>
-  <system-out><![CDATA[]]></system-out>
+  <system-out><![CDATA[Tracing compile failure path for type 'com.hirshi001.gwtrestapi.test.GWTRestTest'
+   [ERROR] Errors in 'file:/Users/hrishikesh/Workspace/Java/RestAPI/gwtrestapi/src/test/java/com/hirshi001/gwtrestapi/test/GWTRestTest.java'
+      [ERROR] Line 17: No source code is available for type com.hirshi001.restapi.RestAPI; did you forget to inherit a required module?
+      [ERROR] Line 25: No source code is available for type com.hirshi001.restapi.RestFuture<T,U>; did you forget to inherit a required module?
+[ERROR] Hint: Your source appears not to live underneath a subpackage called 'client'; no problem, but you'll need to use the <source> directive in your module to make it accessible
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

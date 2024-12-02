@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id "org.docstr.gwt" version "2.1.0"
+    id "org.docstr.gwt" version "2.1.1"
+    id 'java-library'
 }
 
 repositories {
@@ -9,4 +10,12 @@ repositories {
 
 gwt {
     modules = ['com.hirshi001.restapi.RestAPI']
+}
+
+test {
+    useJUnit()
+}
+
+tasks.withType(Test) {
+    classpath += sourceSets.test.runtimeClasspath
 }

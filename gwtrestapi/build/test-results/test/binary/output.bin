@@ -1,0 +1,5 @@
+RTracing compile failure path for type 'com.hirshi001.gwtrestapi.test.GWTRestTest'
+ç   [ERROR] Errors in 'file:/Users/hrishikesh/Workspace/Java/RestAPI/gwtrestapi/src/test/java/com/hirshi001/gwtrestapi/test/GWTRestTest.java'
+à      [ERROR] Line 17: No source code is available for type com.hirshi001.restapi.RestAPI; did you forget to inherit a required module?
+ê      [ERROR] Line 25: No source code is available for type com.hirshi001.restapi.RestFuture<T,U>; did you forget to inherit a required module?
+∂[ERROR] Hint: Your source appears not to live underneath a subpackage called 'client'; no problem, but you'll need to use the <source> directive in your module to make it accessible

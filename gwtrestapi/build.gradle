@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id "org.docstr.gwt" version "2.1.0"
+    id "org.docstr.gwt" version "2.1.1"
+    id 'java-library'
 }
 
 repositories {
@@ -10,16 +11,22 @@ repositories {
 dependencies {
     testImplementation 'junit:junit:4.13.2'
 
-
     implementation "org.gwtproject:gwt-user:2.12.0"
-    implementation project(':restapi')
+
+    api project(':restapi')
 }
 
 test {
     useJUnit()
 }
 
+tasks.withType(Test) {
+    classpath += sourceSets.test.runtimeClasspath
+}
+
+// append :restapi sources, including generated sources, and non .java files
+
 gwt {
     sourceLevel = '17'
-    modules = ['com.hirshi001.gwtrestapi.GWTRestAPI', 'com.hirshi001.gwtrestapi.test.Test']
+    modules = ['com.hirshi001.gwtrestapi.test.Test', 'com.hirshi001.gwtrestapi.GWTRestAPI']
 }
