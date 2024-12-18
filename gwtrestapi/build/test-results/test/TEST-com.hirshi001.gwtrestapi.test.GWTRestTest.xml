@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.hirshi001.gwtrestapi.test.GWTRestTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2024-12-02T03:14:22" hostname="Hrishikeshs-MacBook-Pro.local" time="5.644">
+<testsuite name="com.hirshi001.gwtrestapi.test.GWTRestTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2024-12-02T08:19:47" hostname="Hrishikeshs-MacBook-Pro.local" time="6.195">
   <properties/>
-  <testcase name="testBothMethods" classname="com.hirshi001.gwtrestapi.test.GWTRestTest" time="5.644">
+  <testcase name="testBothMethods" classname="com.hirshi001.gwtrestapi.test.GWTRestTest" time="6.195">
     <failure message="com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' had compile errors; check log for details" type="com.google.gwt.junit.JUnitFatalLaunchException">com.google.gwt.junit.JUnitFatalLaunchException: The test class 'com.hirshi001.gwtrestapi.test.GWTRestTest' had compile errors; check log for details
 	at app//com.google.gwt.junit.JUnitShell.checkTestClassInCurrentModule(JUnitShell.java:741)
 	at app//com.google.gwt.junit.JUnitShell.runTestImpl(JUnitShell.java:1360)

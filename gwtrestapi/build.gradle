@@ -20,12 +20,11 @@ test {
     useJUnit()
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     classpath += sourceSets.test.runtimeClasspath
 }
 
 // append :restapi sources, including generated sources, and non .java files
-
 gwt {
     sourceLevel = '17'
     modules = ['com.hirshi001.gwtrestapi.test.Test', 'com.hirshi001.gwtrestapi.GWTRestAPI']
